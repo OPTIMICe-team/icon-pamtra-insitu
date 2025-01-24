@@ -32,7 +32,7 @@ The we need to add an additional python process to MPI. We use the `--multi-prog
 Add this just before the `srun` (`${START}`) call
 ```bash
 cat > mpmd.conf << EOF
-/path/to/venv/bin/python path/to/pamtra/component.py
+/path/to/venv/bin/python path/to/pamtra/aircraft_nopamtra.py --track=TRACKFILE.nc
 * ${MODEL}
 EOF
 ```
@@ -45,3 +45,35 @@ with
 ${START} --multi-prog mpmd.conf
 ```
 (This does only work with slurm.)
+
+## TRACKFILE.nc
+This is just a netCDF file that contains the time,lat,lon information of the satellite track. This is the ncdump of my file:
+```
+dimensions:
+	time = 17523 ;
+variables:
+	int time(time) ;
+		time:units = "seconds since 2017-01-01T00:00:00+00:00" ;
+		time:calendar = "proleptic_gregorian" ;
+	double seconds(time) ;
+		seconds:_FillValue = NaN ;
+		seconds:long_name = "Seconds since start of day" ;
+		seconds:units = "s" ;
+		seconds:comment = "Time as recorded by the GPS" ;
+	double lat(time) ;
+		lat:_FillValue = NaN ;
+		lat:long_name = "latitude" ;
+		lat:units = "degrees_north" ;
+		lat:comment = "GPS latitude" ;
+	double lon(time) ;
+		lon:_FillValue = NaN ;
+		lon:long_name = "longitude" ;
+		lon:units = "degrees_east" ;
+		lon:comment = "GPS longitude" ;
+	double alt(time) ;
+		alt:_FillValue = NaN ;
+		alt:long_name = "altitude" ;
+		alt:units = "m" ;
+		alt:comment = "Aircraft altitude" ;
+```
+but the variables "seconds" and "alt" are not relevant
